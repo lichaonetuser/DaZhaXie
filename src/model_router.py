@@ -23,6 +23,10 @@ class TaskType(Enum):
     CREATIVE_WRITING = "creative_writing"     # 创意写作
     TRANSLATION = "translation"               # 翻译
     CLASSIFICATION = "classification"         # 分类
+    MATHEMATICAL = "mathematical"             # 数学计算
+    FACT_VERIFICATION = "fact_verification"   # 事实核查
+    INSTRUCTION_FOLLOWING = "instruction_following"  # 指令跟随
+    MULTI_TURN_CONVERSATION = "multi_turn"   # 多轮对话
     DEFAULT = "default"                       # 默认
 
 
@@ -35,6 +39,12 @@ class ModelInfo:
     speed_score: float = 0.5            # 速度评分 0-1，越高越快
     quality_score: float = 0.5          # 质量评分 0-1，越高越好
     cost_per_1k_tokens: float = 0.001   # 每1000 token成本
+    
+    # 新增：各维度能力评分（参考MMLU、HumanEval等基准）
+    reasoning_score: float = 0.5        # 推理能力
+    coding_score: float = 0.5           # 编程能力
+    factual_score: float = 0.5          # 事实准确性
+    instruction_score: float = 0.5      # 指令遵循能力
     
     @property
     def 综合评分(self) -> float:
@@ -55,26 +65,42 @@ class ModelRouter:
         "llama-3.3-70b": ModelInfo(
             name="Llama 3.3 70B",
             endpoint="meta/llama-3.3-70b-instruct",
-            task_types=[TaskType.LOGIC_REASONING, TaskType.SUMMARIZATION, TaskType.CLASSIFICATION],
+            task_types=[TaskType.LOGIC_REASONING, TaskType.SUMMARIZATION, 
+                       TaskType.CLASSIFICATION, TaskType.FACT_VERIFICATION,
+                       TaskType.INSTRUCTION_FOLLOWING],
             speed_score=0.6,
             quality_score=0.95,
-            cost_per_1k_tokens=0.001
+            cost_per_1k_tokens=0.001,
+            reasoning_score=0.92,  # 推理能力强
+            coding_score=0.75,
+            factual_score=0.88,
+            instruction_score=0.90
         ),
         "minimax-m2.5": ModelInfo(
             name="MiniMax M2.5",
             endpoint="minimaxai/minimax-m2.5",
-            task_types=[TaskType.CODE_GENERATION, TaskType.DEFAULT, TaskType.CREATIVE_WRITING],
+            task_types=[TaskType.CODE_GENERATION, TaskType.DEFAULT, 
+                       TaskType.CREATIVE_WRITING, TaskType.MULTI_TURN_CONVERSATION],
             speed_score=0.4,
             quality_score=0.85,
-            cost_per_1k_tokens=0.001
+            cost_per_1k_tokens=0.001,
+            reasoning_score=0.78,
+            coding_score=0.88,  # 编程能力强
+            factual_score=0.75,
+            instruction_score=0.82
         ),
         "mixtral-8x7b": ModelInfo(
             name="Mixtral 8x7B",
             endpoint="mistralai/mixtral-8x7b-instruct-v0.1",
-            task_types=[TaskType.QUESTION_ANSWER, TaskType.DEFAULT, TaskType.TRANSLATION],
-            speed_score=0.9,
+            task_types=[TaskType.QUESTION_ANSWER, TaskType.DEFAULT, 
+                       TaskType.TRANSLATION, TaskType.MATHEMATICAL],
+            speed_score=0.9,   # 速度最快
             quality_score=0.75,
-            cost_per_1k_tokens=0.0007
+            cost_per_1k_tokens=0.0007,
+            reasoning_score=0.70,
+            coding_score=0.72,
+            factual_score=0.68,
+            instruction_score=0.75
         ),
     }
     
@@ -91,15 +117,19 @@ class ModelRouter:
         # 加载历史表现数据
         self.performance_history: Dict[str, List[float]] = self._load_history()
         
-        # 任务分类关键词映射
+        # 任务分类关键词映射 - 扩展更多场景
         self.task_keywords = {
-            TaskType.LOGIC_REASONING: ["逻辑", "推理", "计算", "解方程", "证明", "分析"],
-            TaskType.CODE_GENERATION: ["代码", "写程序", "函数", "算法", "实现", "编程", "Python", "JavaScript"],
-            TaskType.QUESTION_ANSWER: ["什么是", "为什么", "怎么样", "如何", "问题", "问答"],
-            TaskType.SUMMARIZATION: ["总结", "概括", "摘要", "核心观点", "要点"],
-            TaskType.CREATIVE_WRITING: ["写", "创作", "故事", "诗歌", "文章", "文案"],
-            TaskType.TRANSLATION: ["翻译", "英文", "中文", "语言转换"],
-            TaskType.CLASSIFICATION: ["分类", "判断", "属于", "类型"],
+            TaskType.LOGIC_REASONING: ["逻辑", "推理", "计算", "解方程", "证明", "分析", "推导", "判断"],
+            TaskType.CODE_GENERATION: ["代码", "写程序", "函数", "算法", "实现", "编程", "Python", "JavaScript", "写个"],
+            TaskType.QUESTION_ANSWER: ["什么是", "为什么", "怎么样", "如何", "问题", "问答", "解释"],
+            TaskType.SUMMARIZATION: ["总结", "概括", "摘要", "核心观点", "要点", "简短描述"],
+            TaskType.CREATIVE_WRITING: ["写", "创作", "故事", "诗歌", "文章", "文案", "写一首"],
+            TaskType.TRANSLATION: ["翻译", "英文", "中文", "语言转换", "译成"],
+            TaskType.CLASSIFICATION: ["分类", "判断", "属于", "类型", "归类"],
+            TaskType.MATHEMATICAL: ["数学", "计算", "加减乘除", "平方", "开方", "求和", "概率"],
+            TaskType.FACT_VERIFICATION: ["验证", "真假", "是否正确", "事实", "核实"],
+            TaskType.INSTRUCTION_FOLLOWING: ["按照", "遵循", "按照以下", "请务必", "严格"],
+            TaskType.MULTI_TURN: ["接着", "然后呢", "还有", "继续", "上文"],
         }
     
     def _load_history(self) -> Dict[str, List[float]]:
@@ -139,7 +169,8 @@ class ModelRouter:
         self, 
         task_type: TaskType, 
         prefer_speed: bool = False,
-        prefer_quality: bool = True
+        prefer_quality: bool = True,
+        capability_weight: str = "reasoning"  # 新增：能力权重
     ) -> ModelInfo:
         """
         根据任务类型选择最优模型
@@ -148,6 +179,7 @@ class ModelRouter:
             task_type: 任务类型
             prefer_speed: 是否优先考虑速度
             prefer_quality: 是否优先考虑质量
+            capability_weight: 能力权重 (reasoning/coding/factual/instruction)
             
         Returns:
             ModelInfo: 选中的模型信息
@@ -159,14 +191,26 @@ class ModelRouter:
         ]
         
         if not candidates:
-            # 如果没有匹配的，返回默认模型
             candidates = [self.MODELS["minimax-m2.5"]]
+        
+        # 根据能力权重调整排序
+        def capability_key(m: ModelInfo) -> float:
+            if capability_weight == "reasoning":
+                return m.reasoning_score
+            elif capability_weight == "coding":
+                return m.coding_score
+            elif capability_weight == "factual":
+                return m.factual_score
+            elif capability_weight == "instruction":
+                return m.instruction_score
+            else:
+                return m.综合评分
         
         # 根据偏好排序
         if prefer_speed:
             candidates.sort(key=lambda m: m.speed_score, reverse=True)
         elif prefer_quality:
-            candidates.sort(key=lambda m: m.quality_score, reverse=True)
+            candidates.sort(key=capability_key, reverse=True)
         else:
             candidates.sort(key=lambda m: m.综合评分, reverse=True)
         
@@ -177,7 +221,7 @@ class ModelRouter:
             if history:
                 avg_score = sum(history) / len(history)
                 if avg_score < 0.5:
-                    continue  # 跳过历史表现差的模型
+                    continue
             selected = model
             break
         
@@ -228,66 +272,119 @@ class ModelRouter:
         }
 
 
-# ==================== 测试用例 ====================
+# ==================== 测试用例（难度提升版）====================
 
 def test_model_router():
-    """测试模型路由器"""
-    print("=" * 50)
-    print("测试：ModelRouter")
-    print("=" * 50)
+    """测试模型路由器 - 难度提升版"""
+    print("=" * 60)
+    print("测试：ModelRouter - 难度提升版")
+    print("=" * 60)
     
     router = ModelRouter()
     
-    # 测试用例
-    test_cases = [
-        ("帮我解这道数学题：有3个红箱子，每个蓝箱子比红箱子多2个球，总球数27，求红蓝箱子各多少球？", TaskType.LOGIC_REASONING),
-        ("写一个Python算法，找出数组中出现次数超过n/3的元素", TaskType.CODE_GENERATION),
+    # ========== 第一部分：基础任务分类测试 ==========
+    print("\n【第一部分】基础任务分类")
+    print("-" * 40)
+    
+    basic_tests = [
+        ("帮我解这道数学题：有3个红箱子...", TaskType.LOGIC_REASONING),
+        ("写一个Python算法...", TaskType.CODE_GENERATION),
         ("今天天气怎么样？", TaskType.QUESTION_ANSWER),
-        ("总结一下这篇文章的主要内容", TaskType.SUMMARIZATION),
-        ("写一首关于春天的诗", TaskType.CREATIVE_WRITING),
-        ("把这段话翻译成英文", TaskType.TRANSLATION),
-        ("这段代码属于什么类型？", TaskType.CLASSIFICATION),
-        ("你好，请帮我个忙", TaskType.DEFAULT),
+        ("总结一下这篇文档...", TaskType.SUMMARIZATION),
     ]
     
-    passed = 0
-    failed = 0
+    for user_input, expected in basic_tests:
+        actual = router.classify_task(user_input)
+        status = "✓" if actual == expected else "✗"
+        print(f"{status} {user_input[:25]}... => {actual.value}")
     
-    for user_input, expected_type in test_cases:
-        # 任务分类测试
-        actual_type = router.classify_task(user_input)
-        type_ok = actual_type == expected_type
-        
-        # 模型选择测试
-        model = router.select_model(actual_type)
-        
-        status = "✓" if type_ok else "✗"
-        print(f"\n{status} 输入: {user_input[:30]}...")
-        print(f"  预期类型: {expected_type.value}, 实际: {actual_type.value}")
-        print(f"  选用模型: {model.name} (质量:{model.quality_score}, 速度:{model.speed_score})")
-        
-        if type_ok:
-            passed += 1
-        else:
-            failed += 1
+    # ========== 第二部分：模糊/歧义测试 ==========
+    print("\n【第二部分】模糊/歧义任务")
+    print("-" * 40)
     
-    # 测试性能记录
-    print("\n" + "-" * 50)
+    ambiguous_tests = [
+        # 双重否定
+        ("不要不回答这个问题", TaskType.QUESTION_ANSWER),
+        # 混合任务
+        ("帮我写个程序并解释原理", TaskType.CODE_GENERATION),
+        # 隐含任务
+        ("这段代码有bug吗？", TaskType.CODE_GENERATION),  # 其实是问bug，属于代码相关
+        # 缩写/简写
+        ("py写个快排", TaskType.CODE_GENERATION),
+    ]
+    
+    for user_input, expected in ambiguous_tests:
+        actual = router.classify_task(user_input)
+        status = "✓" if actual == expected else "✗"
+        print(f"{status} {user_input[:25]}... => {actual.value}")
+    
+    # ========== 第三部分：能力匹配测试 ==========
+    print("\n【第三部分】能力匹配")
+    print("-" * 40)
+    
+    # 测试不同能力权重下的模型选择
+    capability_tests = [
+        ("解这个逻辑谜题", "reasoning"),
+        ("写一个排序算法", "coding"),
+        ("验证这个说法是否正确", "factual"),
+        ("严格按照以下要求执行", "instruction"),
+    ]
+    
+    for user_input, capability in capability_tests:
+        model = router.select_model(
+            router.classify_task(user_input),
+            capability_weight=capability
+        )
+        print(f"  任务: {user_input[:20]}...")
+        print(f"    能力权重: {capability} => 选用: {model.name}")
+        print(f"    能力分: 推理{model.reasoning_score}, 编程{model.coding_score}, 事实{model.factual_score}")
+    
+    # ========== 第四部分：边界测试 ==========
+    print("\n【第四部分】边界测试")
+    print("-" * 40)
+    
+    edge_cases = [
+        ("", TaskType.DEFAULT),  # 空输入
+        ("   ", TaskType.DEFAULT),  # 空白
+        ("abc123xyz", TaskType.DEFAULT),  # 无意义字符
+        ("请问", TaskType.QUESTION_ANSWER),  # 极短但有意义
+    ]
+    
+    for user_input, expected in edge_cases:
+        actual = router.classify_task(user_input)
+        status = "✓" if actual == expected else "✗"
+        print(f"{status} '{user_input[:15] if user_input else '(空)'}' => {actual.value}")
+    
+    # ========== 第五部分：性能追踪测试 ==========
+    print("\n【第五部分】性能追踪")
+    print("-" * 40)
+    
+    # 模拟多次评分记录
     router.record_performance("Llama 3.3 70B", 0.85)
-    router.record_performance("Llama 3.3 70B", 0.90)
-    router.record_performance("MiniMax M2.5", 0.75)
-    print("已记录测试性能数据")
+    router.record_performance("Llama 3.3 70B", 0.92)
+    router.record_performance("Llama 3.3 70B", 0.45)  # 一次低分
     
-    # 测试统计
-    print("\n" + "-" * 50)
+    history = router.performance_history.get("Llama 3.3 70B", [])
+    avg = sum(history) / len(history) if history else 0
+    print(f"  历史评分: {history}")
+    print(f"  平均分: {avg:.2f}")
+    
+    # 验证低分后降低优先级
+    model = router.select_model(TaskType.LOGIC_REASONING)
+    print(f"  低分后选用模型: {model.name}")
+    
+    # ========== 第六部分：统计信息 ==========
+    print("\n【第六部分】统计信息")
+    print("-" * 40)
+    
     stats = router.get_stats()
-    print(f"统计信息: {stats}")
+    print(f"  模型数量: {stats['total_models']}")
+    print(f"  支持任务类型: {len(stats['supported_task_types'])}种")
+    print(f"  历史记录: {stats['performance_records']}")
     
-    print("\n" + "=" * 50)
-    print(f"测试结果: {passed} 通过, {failed} 失败")
-    print("=" * 50)
-    
-    return failed == 0
+    print("\n" + "=" * 60)
+    print("测试完成")
+    print("=" * 60)
 
 
 if __name__ == "__main__":

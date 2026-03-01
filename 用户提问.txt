@@ -1,0 +1,503 @@
+用户提问
+====
+
+1. 14:02 UTC] 我创建了你。你叫大闸蟹
+
+2. 14:18 UTC] 我创建了你。你叫大闸蟹
+
+3. 14:56 UTC] hi
+
+4. 14:58 UTC] 是的。你先检查一下你的openclaw.json为什么使用openclaw models minimaxai/minimax-m2.5切换就会报错。报错信息你看一下日志。别操作告诉我为什么就可以了。
+
+5. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 15:47 UTC"
+}
+```
+
+.
+
+6. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 15:48 UTC"
+}
+```
+
+我是你的创建者刚才用tui跟你聊过的。
+
+7. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 15:48 UTC"
+}
+```
+
+你以后就叫这个了。
+
+8. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 15:49 UTC"
+}
+```
+
+嗯。还有你是个agent对吧？
+
+9. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 15:50 UTC"
+}
+```
+
+？
+
+10. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:00 UTC"
+}
+```
+
+我以为你死了。这么久才回
+
+11. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:00 UTC"
+}
+```
+
+不是bug是我把你终端关闭了。
+
+12. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:01 UTC"
+}
+```
+
+哪些技能能增强你的搜索能力还不需要key的？找一下安装前告诉我
+
+13. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:07 UTC"
+}
+```
+
+安装。
+
+14. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:08 UTC"
+}
+```
+
+你列出的这几个都安
+
+15. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:11 UTC"
+}
+```
+
+安装
+
+16. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:17 UTC"
+}
+```
+
+具体怎么用？
+
+17. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:18 UTC"
+}
+```
+
+我上次聊了什么能搜索多久的？
+
+18. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:25 UTC"
+}
+```
+
+我记得原来聊天记录都是JSON文件存储。什么时候改用数据库的？
+
+19. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:28 UTC"
+}
+```
+
+其实用SQLlite效率会比JSON高吧
+
+20. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:33 UTC"
+}
+```
+
+用tui和这么聊天那个处理速度更快效率更高？那个费token多？为什么？
+
+21. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:36 UTC"
+}
+```
+
+读取这个网站所有可以api调用类的对话类AI大模型，分析那个效果最好相应最快，幻觉最少。复杂问题处理能力强，给我汇总一下。你要挨个看和网上找资料评估 https://build.nvidia.com/models
+
+22. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:41 UTC"
+}
+```
+
+复杂问题处理能力强没测？而且你用测试用例测了吗。测试用例是怎么写的。
+
+23. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:42 UTC"
+}
+```
+
+分别测试，测完给我生成每个的报告。每个测试都生成报告。
+
+24. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:51 UTC"
+}
+```
+
+不是切换是让你看测评或者你在本地写个python文件调用测试示例。不要修改openclaw.josn
+
+25. System: [2026-02-28 17:01:15 UTC] Exec failed (marine-c, signal SIGTERM)
+
+Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 16:52 UTC"
+}
+```
+
+他那个网页直接就有测试示例代码。key直接用你配置里的key就行了。不要修改你自身
+
+26. System: [2026-02-28 17:07:52 UTC] Exec completed (warm-val, code 0) :: ly teachers are older than students, but could be older, could be about the same age if teaching adult education. However, typical scenario: The teacher is older. Thus, we need to…
+
+Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:05 UTC"
+}
+```
+
+速度是一方面也看输出质量。就是我写的那些测评项
+
+27. System: [2026-02-28 17:18:34 UTC] Exec completed (oceanic-, code 0) :: ,"status":410,"detail":"The model 'deepseek-ai/deepseek-r1' has long_context... FAIL {"type":"about:blank","title":"Gone","status":410,"detail":"The model 'deepseek-ai/deepseek-r1…
+
+Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:12 UTC"
+}
+```
+
+说中文
+
+28. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:15 UTC"
+}
+```
+
+之后所有回复都说中文
+
+29. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:28 UTC"
+}
+```
+
+如果都是用，怎么通过策略多重审核趋利避害
+
+30. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:29 UTC"
+}
+```
+
+生成个方案保存到我的仓库。
+
+31. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:34 UTC"
+}
+```
+
+给我git地址你给的这个我看不了。
+
+32. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:43 UTC"
+}
+```
+
+是的。1初始化。
+
+33. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:45 UTC"
+}
+```
+
+github.com/lichaonetuser/dazhaxie.git
+
+34. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:51 UTC"
+}
+```
+
+有什么办法可以保证agent不会在多次沟通过程中设定或行为带偏？有什么策略可以做到这个？如果被带偏也可以根据之前备份恢复状态。
+
+35. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:52 UTC"
+}
+```
+
+你改一下你的输出。看着很乱。
+
+36. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 17:54 UTC"
+}
+```
+
+不要简化，简化就丢失有意义内容了。扩展点儿写多生成几个文档，分段写。
+
+37. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 18:06 UTC"
+}
+```
+
+展示一下
+
+38. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 18:07 UTC"
+}
+```
+
+同步到git。要整理一下git不要都放在一起不同功能简不同目录。
+
+39. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 18:33 UTC"
+}
+```
+
+操作了吗
+
+40. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 18:41 UTC"
+}
+```
+
+还有怎么让agent越用越聪明也生成一个方案。上面的是怕她越来越笨。现在是希望她越来越聪明。
+
+41. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 18:48 UTC"
+}
+```
+
+看了你写的，训练素材和奖惩机制是什么？谁去打分。
+
+42. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 18:53 UTC"
+}
+```
+
+能不能使用无监督学习和智能学习相关技术自动打分？
+
+43. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 19:02 UTC"
+}
+```
+
+写的太杂太乱了。这几个都是一件事AI agent优化与AI模型选用。你重新梳理一下看看那些内容适合整合。写一下具体实施步骤和流程图和源码。
+
+44. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 19:18 UTC"
+}
+```
+
+在创建呢吗
+
+45. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 19:22 UTC"
+}
+```
+
+进度
+
+46. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 19:25 UTC"
+}
+```
+
+你上传。
+
+47. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 19:38 UTC"
+}
+```
+
+程序是空的，文档都要用中文表达。测试用例也没写。
+
+48. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 19:48 UTC"
+}
+```
+
+你在试试看。重启了
+
+49. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 20:01 UTC"
+}
+```
+
+可以了吗
+
+50. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 20:16 UTC"
+}
+```
+
+好了吗
+
+51. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 20:24 UTC"
+}
+```
+
+工具坏的？这个工具是来自技能吗
+
+52. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 20:27 UTC"
+}
+```
+
+https://chat.baidu.com/search?pd=csaitab&setype=csaitab&word=openclaw%20exec%E5%B7%A5%E5%85%B7%E5%9D%8F%E7%9A%84&sa=vs_tab&enterType=vs_tab&conversationLogId=13570629814450616805&pageType=landing&browserID=1012852z你看一下这个
+
+53. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 20:27 UTC"
+}
+```
+
+你看看
+
+54. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 20:33 UTC"
+}
+```
+
+好几个文档还是英文的呀
+
+55. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 20:34 UTC"
+}
+```
+
+不看那个网页了。我说你改的git还是英文markdown呀没改呀
+
+56. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sat 2026-02-28 20:42 UTC"
+}
+```
+
+是的，整理好就行了。还有提升测试用例难度。太简单测试不出什么。也可以看看一些AI测评机构是怎么测试的
+
+57. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sun 2026-03-01 06:55 UTC"
+}
+```
+
+把我们所有对话内容保存成文本文件
+
+58. Conversation info (untrusted metadata):
+```json
+{
+  "timestamp": "Sun 2026-03-01 06:55 UTC"
+}
+```
+
+保存方式是你的回复保存一份我的提问保存一份
+
